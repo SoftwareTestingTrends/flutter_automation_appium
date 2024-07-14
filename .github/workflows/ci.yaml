@@ -19,6 +19,7 @@ jobs:
           uses: android-actions/setup-android@v3
         - name: Check ADB
           run: adb version
+        - name: Check Available devices
           run: adb devices  
         - name: Start emulator
           run: emulator -avd emulator-5554 &
