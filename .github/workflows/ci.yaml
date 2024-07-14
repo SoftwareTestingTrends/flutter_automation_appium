@@ -12,19 +12,21 @@ jobs:
             distribution: 'temurin'
             java-version: '18'
         - name: Install Appium
-          run: npm install -g appium
+          run: 
+            npm install -g appium
+            appium -v
+            appium &>/dev/null &
         - name: Set up Node.js  
           uses: actions/setup-node@v3
           with:
             node-version: 20.5.0
-        - name: Setup Android SDK
-          uses: android-actions/setup-android@v3
-        - name: Check ADB
-          run: adb version
         - name: Install dependencies
           run: npm install
-        - name: Run Test
-          run: npx wdio wdio.android.conf.ts --spec test/specs/*.ts
+        - name: Run Appium Android Test
+          uses: reactivecircus/android-emulator-runner@v2
+          with:
+            api-level: 29
+            script: npx wdio wdio.android.conf.ts --spec test/specs/*.ts
         - uses: actions/upload-artifact@v4
           if: failure()
           with:
