@@ -19,15 +19,18 @@ jobs:
           uses: android-actions/setup-android@v3
         - name: Check ADB
           run: adb version
-        - name: Check Available devices
-          run: adb devices  
-        - name: Start emulator
-          run: emulator -avd emulator-5554 &
-          timeout-minutes: 5  # Adjust timeout as needed
-        - name: Wait for device
-          run: while ! adb devices -l | grep -q emulator-5554; do sleep 5; done  
         - name: Install dependencies
           run: npm install
+        - name: Run Android Emulator
+          run: |
+            echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-28;google_apis;x86_64'
+            echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n test_device -k 'system-images;android-28;google_apis;x86_64' --force
+            $ANDROID_HOME/emulator/emulator -list-avds
+            echo "Starting emulator"
+            nohup $ANDROID_HOME/emulator/emulator -avd test_device -no-snapshot > /dev/null 2>&1 &
+            $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+            $ANDROID_HOME/platform-tools/adb devices
+            echo "Emulator started"
         - name: Run Test
           run: npx wdio wdio.android.conf.ts --spec test/specs/*.ts
         - uses: actions/upload-artifact@v4
