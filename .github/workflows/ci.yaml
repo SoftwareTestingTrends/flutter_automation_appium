@@ -2,7 +2,7 @@ name: Flutter App Test
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     name: Appium Test
     steps:
         - name: Checkout
@@ -11,6 +11,8 @@ jobs:
           with:
             distribution: 'temurin'
             java-version: '18'
+        - name: Install Appium
+          run: npm install -g appium
         - name: Set up Node.js  
           uses: actions/setup-node@v3
           with:
