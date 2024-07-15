@@ -2,7 +2,7 @@ name: Flutter App Test
 on: [push]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     name: Appium Test
     steps:
         - name: Checkout
