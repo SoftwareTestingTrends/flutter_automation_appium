@@ -25,7 +25,7 @@ jobs:
         - name: Run Appium Android Test
           uses: reactivecircus/android-emulator-runner@v2
           with:
-            api-level: 29
+            api-level: 31
             script: npx wdio wdio.android.conf.ts --spec test/specs/*.ts
         - uses: actions/upload-artifact@v4
           if: failure()
