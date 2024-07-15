@@ -25,12 +25,16 @@ jobs:
         - name: Run Appium Android Test
           uses: reactivecircus/android-emulator-runner@v2
           with:
-            api-level: 31
+            api-level: 29
             target: google_apis
             arch: x86_64
-            script: npx wdio wdio.android.conf.ts --spec test/specs/*.ts
+            script:
+              adb wait-for-device
+              adb devices
+              adb logcat > emulator.log &
+              npx wdio wdio.android.conf.ts --spec test/specs/*.ts
         - uses: actions/upload-artifact@v4
           if: failure()
           with:
-            name: logs
-            path: logs
+            name: emulator-log
+            path: emulator.log
