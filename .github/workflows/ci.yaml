@@ -28,7 +28,6 @@ jobs:
             api-level: 31
             target: google_apis
             arch: arm64-v8a
-            image: system-images;android-31;google_apis;arm64-v8a
             script: npx wdio wdio.android.conf.ts --spec test/specs/*.ts
         - uses: actions/upload-artifact@v4
           if: failure()
